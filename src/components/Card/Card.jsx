@@ -1,5 +1,5 @@
 import './Card.css';
-import CardBuy from './Extensions'
+import ReactCardFlip from 'react-card-flip'
 import React, {useEffect, useState} from 'react';
 
 function Card () {
@@ -8,8 +8,11 @@ function Card () {
     //const [buy, setBuy] = useState('buy');
     //const [sale, setSale] = useState('sale');
     const [data, setData] = useState([]);
+    const [isFlipped, setFlipped] = useState(false);
     
-    
+    const handleClick = () => {
+        setFlipped(!isFlipped);
+    };
 
     useEffect(() => {
         fetch('https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid=5')
@@ -33,14 +36,18 @@ function Card () {
         <div className='container'>
             {data.map((post) =>{
                 return(
-                    <div className="currency__card" key={post.id}>
-                        <div className='card__front front'>
+                    <ReactCardFlip isFlipped={isFlipped} flipDirection="horizontal">
+                        <div onClick={handleClick} className='currency__card'>
                             <div>Ин.Валюта - <span>{post.ccy}</span></div>
                             <div>Валюта - <span>{post.base_ccy}</span></div>                      
                             <div>Продажа - <span>{post.sale}</span></div>
+                        </div>
+                        <div onClick={handleClick} className='currency__card'>
+                            <div>Ин.Валюта - <span>{post.ccy}</span></div>
+                            <div>Валюта - <span>{post.base_ccy}</span></div>                      
                             <div>Покупка - <span>{post.buy}</span></div>
                         </div>
-                    </div>                  
+                    </ReactCardFlip>     
                 );
             })}
             
